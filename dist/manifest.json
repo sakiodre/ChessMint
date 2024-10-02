@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
-    "name": "ChessMint",
-    "short_name": "ChessMint",
+    "name": "ChessMintV2",
+    "short_name": "ChessMintV2",
     "icons": {
         "16": "img/logo-16.png",
         "48": "img/logo-48.png",
@@ -12,12 +12,11 @@
     "content_scripts": [
         {
             "js": [
-                "js/loader.js"
+                "loader.js"
             ],
             "css": [
-                "css/depthbar.css",
-                "css/evalbar.css",
-                "css/material-icon.css"
+                "css/chesscom/evaluation-bar.css",
+                "css/chesscom/sidebar-analysis.css"
             ],
             "matches": [
                 "https://www.chess.com/*"
@@ -25,13 +24,10 @@
             "run_at": "document_start"
         }
     ],
-    "action": {
-        "default_popup": "html/options.html"
-    },
     "web_accessible_resources": [
         {
             "resources": [
-                "js/chessmint.js"
+                "chessmint.js"
             ],
             "matches": [
                 "https://www.chess.com/*"

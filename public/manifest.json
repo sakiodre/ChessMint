@@ -1,0 +1,41 @@
+{
+    "manifest_version": 3,
+    "name": "ChessMintV2",
+    "short_name": "ChessMintV2",
+    "icons": {
+        "16": "img/logo-16.png",
+        "48": "img/logo-48.png",
+        "128": "img/logo-128.png"
+    },
+    "version": "1.0.0",
+    "description": "Help you with chess",
+    "content_scripts": [
+        {
+            "js": [
+                "loader.js"
+            ],
+            "css": [
+                "css/chesscom/evaluation-bar.css",
+                "css/chesscom/sidebar-analysis.css"
+            ],
+            "matches": [
+                "https://www.chess.com/*"
+            ],
+            "run_at": "document_start"
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "chessmint.js"
+            ],
+            "matches": [
+                "https://www.chess.com/*"
+            ]
+        }
+    ],
+    "permissions": [
+        "tabs",
+        "storage"
+    ]
+}

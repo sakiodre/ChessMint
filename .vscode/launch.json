@@ -1,18 +1,16 @@
 {
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
             "type": "chrome",
-            "request": "attach",
-            "name": "ChessMint debugger",
-            "port": 9992,
-            "url": "https://www.chess.com/*",
-            "webRoot": "${workspaceFolder}/dist",
-            "preLaunchTask": "tsc: build - tsconfig.json",
-            "sourceMaps": true,
-            "outFiles": [
-                "${workspaceRoot}/dist/js/*.js"
-            ],
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            "url": "https://chess.com/play/computer",
+            "webRoot": "${workspaceFolder}",
+            "preLaunchTask": "npm: dev"
         }
     ]
 }

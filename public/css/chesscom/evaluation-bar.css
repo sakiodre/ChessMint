@@ -1,0 +1,595 @@
+.evaluation-loader-bar {
+    border-radius: var(--radius-s);
+    flex-shrink: 0;
+    height: 100%;
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    width: var(--evalWidth)
+}
+
+.evaluation-loader-bar.evaluation-loader-wide-eval-bar .evaluation-loader-score {
+    margin-left: .4rem
+}
+
+.evaluation-loader-bar.evaluation-loader-clickable {
+    cursor: pointer
+}
+
+.evaluation-loader-bar .evaluation-loader-critical {
+    bottom: 0;
+    display: none;
+    padding: .5rem .2rem;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    z-index: 3
+}
+
+.evaluation-loader-bar .evaluation-loader-critical.evaluation-loader-visible {
+    display: block
+}
+
+.evaluation-loader-bar .evaluation-loader-critical.evaluation-loader-floating {
+    top: -1.2rem
+}
+
+.evaluation-loader-bar .evaluation-loader-critical.evaluation-loader-mateIn {
+    height: 5rem
+}
+
+.evaluation-loader-bar .evaluation-loader-critical.evaluation-loader-blackMateIn {
+    top: -95%
+}
+
+.evaluation-loader-bar .evaluation-loader-relative {
+    position: relative
+}
+
+.evaluation-loader-bar.evaluation-loader-flipped,
+.evaluation-loader-bar.evaluation-loader-flipped .evaluation-loader-loader,
+.evaluation-loader-bar.evaluation-loader-flipped .evaluation-loader-scoreAbbreviated {
+    transform: rotate(180deg)
+}
+
+.evaluation-loader-bar.evaluation-loader-flipped .evaluation-loader-score {
+    --flipTransform: rotate(180deg)
+}
+
+.evaluation-loader-bar .evaluation-loader-fill {
+    background-color: var(--color-transparent-white-5);
+    border-radius: var(--radius-s);
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    z-index: -1
+}
+
+.evaluation-loader-bar .evaluation-loader-color {
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    transition: transform 1s ease-in;
+    width: 100%
+}
+
+.evaluation-loader-bar .evaluation-loader-white {
+    background-color: var(--color-neutrals-white);
+    z-index: 2
+}
+
+.evaluation-loader-bar .evaluation-loader-black {
+    background-color: #403d39;
+    z-index: 1
+}
+
+.evaluation-loader-bar .evaluation-loader-draw {
+    background-color: #777574;
+    z-index: 0
+}
+
+.evaluation-loader-bar .evaluation-loader-gradient {
+    background: linear-gradient(#b7483f, #b6b73f 50%, #749c4d);
+    z-index: 0
+}
+
+.evaluation-loader-bar .evaluation-loader-loader {
+    height: 100%;
+    width: 100%
+}
+
+.evaluation-loader-bar .evaluation-loader-loading-message {
+    color: var(--color-transparent-white-65);
+    font-size: 1.5rem;
+    font-weight: 600;
+    left: 50%;
+    position: absolute;
+    -webkit-text-orientation: sideways;
+    text-orientation: sideways;
+    text-transform: uppercase;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0) rotate(180deg);
+    writing-mode: vertical-rl;
+    z-index: 2
+}
+
+.evaluation-loader-bar .evaluation-loader-score {
+    display: none;
+    font-size: 1.2rem;
+    font-weight: 600;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    padding: .5rem .2rem;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    z-index: 2
+}
+
+.evaluation-loader-bar .evaluation-loader-score.evaluation-loader-dark {
+    bottom: 0;
+    color: #403d39
+}
+
+.evaluation-loader-bar .evaluation-loader-score.evaluation-loader-light {
+    color: var(--color-neutrals-white);
+    top: 0
+}
+
+.evaluation-loader-bar .evaluation-loader-score.evaluation-loader-draw {
+    color: var(--color-neutrals-white)
+}
+
+.evaluation-loader-bar:hover .evaluation-loader-score {
+    border-radius: var(--radius-m);
+    bottom: auto;
+    display: block;
+    font-weight: 700;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    padding: .1rem .5rem;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    transform: translate(calc(var(--evalWidth)/2 - 50%), -50%) var(--flipTransform, rotate(0deg));
+    transition: opacity .2s;
+    transition-delay: .1s;
+    width: 4.5rem;
+    z-index: 2
+}
+
+.evaluation-loader-bar:hover .evaluation-loader-score.evaluation-loader-dark {
+    background-color: var(--color-neutrals-white);
+    color: #403d39
+}
+
+.evaluation-loader-bar:hover .evaluation-loader-score.evaluation-loader-light {
+    background-color: #403d39;
+    color: var(--color-neutrals-white)
+}
+
+.evaluation-loader-bar:hover .evaluation-loader-score-long {
+    white-space: nowrap;
+    width: auto
+}
+
+.evaluation-loader-bar .evaluation-loader-scoreAbbreviated {
+    display: var(--evaluation-bar-score-display, block);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: .5rem 0;
+    position: absolute;
+    text-align: center;
+    white-space: pre;
+    width: 100%;
+    z-index: 2
+}
+
+.evaluation-loader-bar .evaluation-loader-scoreAbbreviated.evaluation-loader-dark {
+    bottom: 0;
+    color: #403d39
+}
+
+.evaluation-loader-bar .evaluation-loader-scoreAbbreviated.evaluation-loader-light {
+    color: var(--color-neutrals-white);
+    top: 0
+}
+
+.evaluation-loader-bar .evaluation-loader-scoreAbbreviated.evaluation-loader-complexity {
+    bottom: 0;
+    color: var(--color-neutrals-white)
+}
+
+.evaluation-loader-bar .evaluation-loader-scoreAbbreviated.evaluation-loader-draw {
+    background: transparent;
+    bottom: 0;
+    color: #403d39
+}
+
+.evaluation-loader-color {
+    background: var(--color-green-400)
+}
+
+.evaluation-bar-bar {
+    border-radius: var(--radius-s);
+    flex-shrink: 0;
+    height: 100%;
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    width: var(--evalWidth)
+}
+
+.evaluation-bar-bar.evaluation-bar-wide-eval-bar .evaluation-bar-score {
+    margin-left: .4rem
+}
+
+.evaluation-bar-bar.evaluation-bar-clickable {
+    cursor: pointer
+}
+
+.evaluation-bar-bar .evaluation-bar-critical {
+    bottom: 0;
+    display: none;
+    padding: .5rem .2rem;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    z-index: 3
+}
+
+.evaluation-bar-bar .evaluation-bar-critical.evaluation-bar-visible {
+    display: block
+}
+
+.evaluation-bar-bar .evaluation-bar-critical.evaluation-bar-floating {
+    top: -1.2rem
+}
+
+.evaluation-bar-bar .evaluation-bar-critical.evaluation-bar-mateIn {
+    height: 5rem
+}
+
+.evaluation-bar-bar .evaluation-bar-critical.evaluation-bar-blackMateIn {
+    top: -95%
+}
+
+.evaluation-bar-bar .evaluation-bar-relative {
+    position: relative
+}
+
+.evaluation-bar-bar.evaluation-bar-flipped,
+.evaluation-bar-bar.evaluation-bar-flipped .evaluation-bar-loader,
+.evaluation-bar-bar.evaluation-bar-flipped .evaluation-bar-scoreAbbreviated {
+    transform: rotate(180deg)
+}
+
+.evaluation-bar-bar.evaluation-bar-flipped .evaluation-bar-score {
+    --flipTransform: rotate(180deg)
+}
+
+.evaluation-bar-bar .evaluation-bar-fill {
+    background-color: var(--color-transparent-white-5);
+    border-radius: var(--radius-s);
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    z-index: -1
+}
+
+.evaluation-bar-bar .evaluation-bar-color {
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    transition: transform 1s ease-in;
+    width: 100%
+}
+
+.evaluation-bar-bar .evaluation-bar-white {
+    background-color: var(--color-neutrals-white);
+    z-index: 2
+}
+
+.evaluation-bar-bar .evaluation-bar-black {
+    background-color: #403d39;
+    z-index: 1
+}
+
+.evaluation-bar-bar .evaluation-bar-draw {
+    background-color: #777574;
+    z-index: 0
+}
+
+.evaluation-bar-bar .evaluation-bar-gradient {
+    background: linear-gradient(#b7483f, #b6b73f 50%, #749c4d);
+    z-index: 0
+}
+
+.evaluation-bar-bar .evaluation-bar-loader {
+    height: 100%;
+    width: 100%
+}
+
+.evaluation-bar-bar .evaluation-bar-loading-message {
+    color: var(--color-transparent-white-65);
+    font-size: 1.5rem;
+    font-weight: 600;
+    left: 50%;
+    position: absolute;
+    -webkit-text-orientation: sideways;
+    text-orientation: sideways;
+    text-transform: uppercase;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0) rotate(180deg);
+    writing-mode: vertical-rl;
+    z-index: 2
+}
+
+.evaluation-bar-bar .evaluation-bar-score {
+    display: none;
+    font-size: 1.2rem;
+    font-weight: 600;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    padding: .5rem .2rem;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    z-index: 2
+}
+
+.evaluation-bar-bar .evaluation-bar-score.evaluation-bar-dark {
+    bottom: 0;
+    color: #403d39
+}
+
+.evaluation-bar-bar .evaluation-bar-score.evaluation-bar-light {
+    color: var(--color-neutrals-white);
+    top: 0
+}
+
+.evaluation-bar-bar .evaluation-bar-score.evaluation-bar-draw {
+    color: var(--color-neutrals-white)
+}
+
+.evaluation-bar-bar:hover .evaluation-bar-score {
+    border-radius: var(--radius-m);
+    bottom: auto;
+    display: block;
+    font-weight: 700;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    padding: .1rem .5rem;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    transform: translate(calc(var(--evalWidth)/2 - 50%), -50%) var(--flipTransform, rotate(0deg));
+    transition: opacity .2s;
+    transition-delay: .1s;
+    width: 4.5rem;
+    z-index: 2
+}
+
+.evaluation-bar-bar:hover .evaluation-bar-score.evaluation-bar-dark {
+    background-color: var(--color-neutrals-white);
+    color: #403d39
+}
+
+.evaluation-bar-bar:hover .evaluation-bar-score.evaluation-bar-light {
+    background-color: #403d39;
+    color: var(--color-neutrals-white)
+}
+
+.evaluation-bar-bar:hover .evaluation-bar-score-long {
+    white-space: nowrap;
+    width: auto
+}
+
+.evaluation-bar-bar .evaluation-bar-scoreAbbreviated {
+    display: var(--evaluation-bar-score-display, block);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: .5rem 0;
+    position: absolute;
+    text-align: center;
+    white-space: pre;
+    width: 100%;
+    z-index: 2
+}
+
+.evaluation-bar-bar .evaluation-bar-scoreAbbreviated.evaluation-bar-dark {
+    bottom: 0;
+    color: #403d39
+}
+
+.evaluation-bar-bar .evaluation-bar-scoreAbbreviated.evaluation-bar-light {
+    color: var(--color-neutrals-white);
+    top: 0
+}
+
+.evaluation-bar-bar .evaluation-bar-scoreAbbreviated.evaluation-bar-complexity {
+    bottom: 0;
+    color: var(--color-neutrals-white)
+}
+
+.evaluation-bar-bar .evaluation-bar-scoreAbbreviated.evaluation-bar-draw {
+    background: transparent;
+    bottom: 0;
+    color: #403d39
+}
+
+.wdl-evaluation-bar-bar {
+    --label-height: 1.2rem;
+    --win-chance: 45%;
+    --loss-chance: 45%;
+    --draw: calc(100% - var(--win-chance) - var(--loss-chance));
+    display: block;
+    flex-shrink: 0;
+    height: 100%;
+    position: relative;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    width: var(--evalWidth)
+}
+
+.wdl-evaluation-bar-bar.wdl-evaluation-bar-clickable {
+    cursor: pointer
+}
+
+.wdl-evaluation-bar-bar.wdl-evaluation-bar-flipped,
+.wdl-evaluation-bar-bar.wdl-evaluation-bar-flipped .wdl-evaluation-bar-labels,
+.wdl-evaluation-bar-bar.wdl-evaluation-bar-flipped .wdl-evaluation-bar-score,
+.wdl-evaluation-bar-bar.wdl-evaluation-bar-flipped .wdl-evaluation-bar-scoreAbbreviated {
+    transform: rotate(180deg)
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-fill,
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-labels {
+    height: 100%;
+    overflow: hidden;
+    position: relative
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-fill {
+    background-color: #777574;
+    border-radius: var(--radius-s)
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-color {
+    bottom: 0;
+    height: 100%;
+    left: -.1rem;
+    position: absolute;
+    right: -.1rem;
+    transition: transform .3s linear;
+    width: calc(100% + .2rem)
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-score-wrap {
+    align-items: center;
+    display: none;
+    height: 100%;
+    justify-content: center;
+    position: absolute;
+    width: 100%
+}
+
+.wdl-evaluation-bar-bar:hover .wdl-evaluation-bar-score-wrap {
+    display: flex
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-score {
+    border-radius: var(--radius-s);
+    display: table;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: .1rem .5rem;
+    pointer-events: none;
+    position: relative;
+    text-align: right;
+    z-index: 1
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-white {
+    background-color: var(--color-neutrals-white);
+    color: #403d39
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-black {
+    background-color: #403d39;
+    color: var(--color-neutrals-white)
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-draw {
+    background-color: #777574;
+    color: var(--color-gray-400)
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-row {
+    display: table-row
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-cell {
+    display: table-cell
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-right {
+    padding-left: 1rem;
+    white-space: pre
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-eval .wdl-evaluation-bar-cell {
+    padding-top: 1rem
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-scoreAbbreviated {
+    font-size: 1rem;
+    font-weight: 600;
+    left: 0;
+    padding: .5rem 0;
+    position: absolute;
+    white-space: pre;
+    width: 100%;
+    z-index: 2
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-scoreAbbreviated.wdl-evaluation-bar-dark {
+    bottom: 0;
+    color: #403d39
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-scoreAbbreviated.wdl-evaluation-bar-light {
+    color: var(--color-neutrals-white);
+    top: 0
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-labels {
+    position: absolute;
+    top: 0;
+    width: 100%
+}
+
+.wdl-evaluation-bar-bar .wdl-evaluation-bar-label {
+    bottom: 0;
+    font-size: 1rem;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    transition: transform .3s linear;
+    width: 100%
+}
+
+.wdl-evaluation-bar-whiteLabel {
+    color: #403d39;
+    transform: translateY(calc(100% - var(--win-chance) + var(--win-chance)/2 - var(--label-height)/2))
+}
+
+.wdl-evaluation-bar-flipped .wdl-evaluation-bar-whiteLabel {
+    transform: translateY(calc(var(--win-chance) - var(--win-chance) + var(--win-chance)/2 - var(--label-height)/2))
+}
+
+.wdl-evaluation-bar-blackLabel {
+    color: var(--color-neutrals-white);
+    transform: translateY(calc(var(--loss-chance) - var(--loss-chance) + var(--loss-chance)/2 - var(--label-height)/2))
+}
+
+.wdl-evaluation-bar-flipped .wdl-evaluation-bar-blackLabel {
+    transform: translateY(calc(100% - var(--loss-chance) + var(--loss-chance)/2 - var(--label-height)/2))
+}
+
+.wdl-evaluation-bar-drawLabel {
+    color: var(--color-gray-400);
+    transform: translateY(calc(100% - var(--draw) - var(--win-chance) + var(--draw)/2 - var(--label-height)/2))
+}
+
+.wdl-evaluation-bar-flipped .wdl-evaluation-bar-drawLabel {
+    transform: translateY(calc(100% - var(--draw) - var(--loss-chance) + var(--draw)/2 - var(--label-height)/2))
+}
