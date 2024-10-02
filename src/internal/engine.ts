@@ -58,8 +58,8 @@ export class Engine {
             stockfishJsURL = stockfishPathConfig.singleThreaded.loader;
         }
 
-        this.options["Hash"] = 1025;
-        this.options["Threads"] = 16;
+        this.options["Hash"] = 512;
+        this.options["Threads"] = 4;
         this.options["MultiPV"] = ENGINE_MULTI_PV;
         this.options["Ponder"] = true;
 

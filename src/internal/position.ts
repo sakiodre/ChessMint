@@ -3,12 +3,12 @@ import { ENGINE_MULTI_PV, IEnginePv } from "./engine";
 import { Analyser } from "./analyser";
 import { EClassification, IChessboard } from "./types/chessboard";
 
-export interface IPricipalVariation extends IEnginePv {
+export interface IPrincipalVariation extends IEnginePv {
     san: TSANotation;
     lineSan: TSANotation[];
 }
 
-let convertEnginePv = (fen: string, pv: IEnginePv): IPricipalVariation => {
+let convertEnginePv = (fen: string, pv: IEnginePv): IPrincipalVariation => {
     
     const chess = new Chess();
     chess.load(fen);
@@ -26,7 +26,7 @@ let convertEnginePv = (fen: string, pv: IEnginePv): IPricipalVariation => {
 };
 
 export class Line {
-    public readonly pvs: IPricipalVariation[];
+    public readonly pvs: IPrincipalVariation[];
     public readonly isInTheory: boolean; // is the game still in theory openings
     public readonly fen: string;
     public readonly lan: TLANotation;

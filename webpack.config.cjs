@@ -1,5 +1,6 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
+const { VueLoaderPlugin } = require("vue-loader");
 
 module.exports = {
     mode: "production",
@@ -11,22 +12,30 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                use: "ts-loader",
+                loader: "ts-loader",
                 exclude: /node_modules/,
+                options: {
+                    appendTsSuffixTo: [/\.vue$/]
+                }
             },
             {
-                test: /\.css$/i,
-                use: ["style-loader", "css-loader"],
+                test: /\.vue$/,
+                loader: "vue-loader"
             },
         ],
     },
     plugins: [
+        new VueLoaderPlugin(),
         new CopyPlugin({
             patterns: [{ from: "./public" }],
         }),
     ],
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
+        alias: {
+            "vue": "vue/dist/vue.esm-browser.prod.js",
+            "@": path.resolve(__dirname, "src/internal")
+        }
     },
     output: {
         filename: "[name].js",

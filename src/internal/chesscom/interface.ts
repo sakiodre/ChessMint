@@ -1,6 +1,6 @@
-import { IPricipalVariation, Line } from "../position";
+import { IPrincipalVariation, Line } from "../position";
 import { EClassification, IChessboard, IChessboardArrow, IChessboardEffect, IChessboardHandler } from "../types/chessboard";
-import { EvaluationBar, AnalysisUI as AnalysisUI } from "./ui";
+import { AnalysisUI } from "./ui";
 
 type TEventType =
     | "all"
@@ -422,6 +422,40 @@ const getClassificationMarkings = (function () {
         return markings;
     };
 })();
+import { createApp, defineComponent } from "vue";
+
+import VueTest from "./../../test.vue";
+
+class testPlugin implements IGamePlugin {
+    name: string;
+    match: { condition: (a: any) => boolean; handler: (e: any, t: any) => void; }[];
+    constructor() {
+        this.name = "test-plugin";
+        this.match = [{
+            condition: (a: any) => {
+                console.log("plugin condition", a);
+                return false;
+            },
+            handler: (e: any, t:any) => {
+            }
+        }]
+    }
+    api(e: any)
+    {
+        return {};
+    }
+    create(e: any)
+    {
+        
+    }
+    destroy(e: any)
+    {
+    }
+    destroyAPIMethods(): void
+    {
+    }
+    
+}
 
 export class ChessComBoard implements IChessboard {
     private readonly board: IChessComBoardElement;
@@ -434,7 +468,8 @@ export class ChessComBoard implements IChessboard {
         this.game = this.board.game;
         this.handler = handler;
 
-        this.analysis = new AnalysisUI(this.board.parentElement!);
+        this.analysis = new AnalysisUI();
+        this.analysis.mountEvalbar(this.board.parentElement!);
 
         this.game.on("Move", (event) => this.onMove(event));
         this.game.on("Load", (event) => this.onLoad(event));
@@ -445,8 +480,10 @@ export class ChessComBoard implements IChessboard {
         this.game.on("MoveForward", (event) => this.onSelectNode(event));
         this.game.on("SelectNode", (event) => this.onSelectNode(event));
 
-        // hook the "move-list" plugin to make the sidebar analysis ui
-        // appear when the move list appears
+        // this.game.plugins.add(new testPlugin());
+
+        // // hook the "move-list" plugin to make the sidebar analysis ui
+        // // appear when the move list appears
         let pluginsAdd = this.game.plugins.add;
         let _this = this;
 
@@ -455,6 +492,9 @@ export class ChessComBoard implements IChessboard {
                 let pluginCreate = plugin.create;
                 plugin.create = function (e: any) {
                     pluginCreate.apply(this, [e]);
+                    plugin.match.forEach((match) => {
+                        match.condition({ type: "a" });
+                    });
 
                     let element =
                         document.querySelector("wc-simple-move-list") ||
@@ -467,28 +507,27 @@ export class ChessComBoard implements IChessboard {
                     let scrollerContainer = document.querySelector(
                         "#" + scrollerContainerId
                     )!.parentElement!;
-                    
-                    scrollerContainer.insertBefore(
-                        _this.analysis.root,
-                        scrollerContainer.firstElementChild
-                    );
+
+                    _this.analysis.mountSidebar(scrollerContainer);
                 };
             }
 
             pluginsAdd.apply(this, [plugin]);
         };
 
-        let pluginsRemove = this.game.plugins.remove;
-        this.game.plugins.remove = function (pluginName: string) {
-            console.log("removing plugin", pluginName);
-            return pluginsRemove(pluginName);
-        };
+        // let pluginsRemove = this.game.plugins.remove;
+        // this.game.plugins.remove = function (pluginName: string) {
+        //     return pluginsRemove(pluginName);
+        // };
     }
 
-    public updateEvaluation(moveNumber: number, line: Line, previousLine?: Line): void {
+    public updateEvaluation(
+        moveNumber: number,
+        line: Line,
+        previousLine?: Line
+    ): void {
         // updating the DOM while the board is animating will make it look laggy
         // only update the analysis tools only if we've finished evaluating
-        console.log("this.game.isAnimating()", this.game.isAnimating());
         if (
             !this.game.isAnimating() ||
             (line.isEvaluationFinished() &&
@@ -604,7 +643,6 @@ export class ChessComBoard implements IChessboard {
     }
 
     private onLoad(event: IGameEvent) {
-        console.log("onLoad", event);
         let lines: IGameHistory[] = event.data.line;
         let lanMoves = lines.map((line) =>
             getLAN(line.from, line.to, line.promotion)

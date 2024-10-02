@@ -1,4 +1,4 @@
-import { IPricipalVariation, Line } from "../position";
+import { IPrincipalVariation, Line } from "../position";
 
 export enum EClassification {
     Best,
