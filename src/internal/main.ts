@@ -8,7 +8,7 @@ class BetterMint {
     private readonly engine: Engine;
     private readonly position: Position;
 
-    private readonly depth: number = 15;
+    private readonly depth: number = 18;
 
     constructor(chessBoard: HTMLElement) {
         this.board = new ChessComBoard(chessBoard, this);
@@ -90,9 +90,11 @@ const observer = new MutationObserver(async function (mutations) {
         mutation.addedNodes.forEach(async function (node) {
             if (node.nodeType === Node.ELEMENT_NODE){
                 const el = node as HTMLElement;
-                if (el.matches("wc-chess-board") || el.matches("chess-board")){
-                    Initialize(el);
-                    observer.disconnect();
+                if (el.tagName == "WC-CHESS-BOARD" || el.tagName == "CHESS-BOARD"){
+                    if (Object.hasOwn(el, "game")) {
+                        Initialize(el);
+                        observer.disconnect();
+                    }
                 }
             }
         })
@@ -120,3 +122,13 @@ observer.observe(document, {
 //     alert("evaluation-bar");
 //     console.log(ctor);
 // });
+
+
+// this make the move list show our annotations
+customElements
+    .whenDefined("wc-mode-swap-move-list")
+    .then(function (ctor: CustomElementConstructor) {
+        ctor.prototype.getMoveListType = function () {
+            return "wc-move-list";
+        };
+    });

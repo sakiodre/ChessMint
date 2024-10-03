@@ -1,23 +1,13 @@
 <template>
     <div class="evaluation-lines-lines">
-        <EvaluationLinesComponent v-for="pv in line.pvs" :pv="pv" :move-number="moveNumber"/>
+        <EvaluationLinesComponent v-if="data.currentLine" v-for="pv in data.currentLine.pvs" :pv="pv" :move-number="data.moveNumber"/>
     </div>
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
-import { Line } from '@/position';
 import EvaluationLinesComponent from './evaluation-lines-component.vue';
+import { getAnalysisData } from './sidebar-analysis';
 
-defineProps({
-    line: {
-        required: true,
-        type: Object as PropType<Line>
-    },
-    moveNumber: {
-        required: true,
-        type: Number
-    }
-})
+const data = getAnalysisData();
 
 </script>

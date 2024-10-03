@@ -1,32 +1,53 @@
 <template>
     <div class="play-controller-above-move-list">
-        <!-- @vue-skip -->
-        <EvaluationLines v-if="currentLine" :line="currentLine" :move-number="moveNumber"/>
-        <!-- @vue-skip -->
-        <Feedback :current-line="currentLine" :previous-line="previousLine" :move-number="moveNumber"/>
+        <EvaluationLines/>
+        <Feedback/>
+        <Teleport v-if="evalBarContainer" :to="evalBarContainer">
+            <EvaluationBar :is-flipped="isFlipped"/>
+        </Teleport>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { provide, reactive, ref } from 'vue';
 import { Line } from '@/position';
 import EvaluationLines from './evaluation-lines.vue';
 import Feedback from './feedback.vue';
+import EvaluationBar from './evaluation-bar.vue';
+import { AnalysisData } from './sidebar-analysis';
 
+// const feedback = ref< InstanceType<typeof Feedback>>();
 
-const moveNumber = ref(-1);
-const currentLine = ref<Line | undefined>(undefined);
-const previousLine = ref<Line | undefined>(undefined);
+const evalBarContainer = ref<Element>();
+const isFlipped = ref(false);
+
+const data = reactive<AnalysisData>({
+    moveNumber: -1,
+    currentLine: undefined,
+    previousLine: undefined
+})
+
+provide("data", data);
 
 function update(m: number, curLine: Line, prevLine?: Line)
 {
-    moveNumber.value = m;
-    currentLine.value = curLine ? Object.assign(Object.create(Object.getPrototypeOf(curLine)), curLine) : undefined;
-    previousLine.value = prevLine ? Object.assign(Object.create(Object.getPrototypeOf(prevLine)), prevLine) : undefined;
+    data.moveNumber = m;
+    data.currentLine = curLine ? Object.assign(Object.create(Object.getPrototypeOf(curLine)), curLine) : undefined;
+    data.previousLine = prevLine ? Object.assign(Object.create(Object.getPrototypeOf(prevLine)), prevLine) : undefined;
+}
+
+function mountEvalBar(container?: Element) {
+    evalBarContainer.value = container;
+}
+
+function setFlipped(flip: boolean) {
+    isFlipped.value = flip;
 }
 
 defineExpose({
     update,
+    mountEvalBar,
+    setFlipped,
 })
 
 </script>

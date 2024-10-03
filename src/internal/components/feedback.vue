@@ -1,56 +1,50 @@
 <template>
     <div class="feedback-wrapper">
-        <FeedbackRow v-if="moveNumber != -1 && currentLine" 
-            :moveNumber="moveNumber"
+        <FeedbackRow v-if="data.moveNumber != -1 && data.currentLine" 
+            :moveNumber="data.moveNumber"
             :is-thinking="false"
             :is-finished="!isThinking()" 
-            :classification="currentLine.getClassification() || EClassification.Best"
-            :san="currentLine.san"
-            :line-san="isCurrentLineBestMove() ? currentLine.pvs[0]?.lineSan ?? [] : []"
-            :evaluation="currentLine.getEvaluation()"
+            :classification="data.currentLine.getClassification() || EClassification.Best"
+            :san="data.currentLine.san"
+            :line-san="isCurrentLineBestMove() ? data.currentLine.pvs[0]?.lineSan ?? [] : []"
+            :evaluation="data.currentLine.getEvaluation()"
             />
 
-        <FeedbackRow v-if="moveNumber != -1 && !isCurrentLineBestMove()" 
-            :moveNumber="moveNumber" 
-            :is-thinking="isThinking()" 
+        <FeedbackRow v-if="data.moveNumber != -1 && !isCurrentLineBestMove()"
+            :moveNumber="data.moveNumber" 
+            :is-thinking="isThinking()"
             :is-finished="true"
             :classification="EClassification.Best" 
-            :san="previousLine?.pvs[0]?.san ?? ''"
-            :line-san="previousLine?.pvs[0]?.lineSan.slice(1) ?? []" 
-            :evaluation="previousLine?.getEvaluation()"
+            :san="data.previousLine?.pvs[0]?.san ?? ''"
+            :line-san="data.previousLine?.pvs[0]?.lineSan.slice(1) ?? []" 
+            :evaluation="data.previousLine?.getEvaluation()"
+            :is-alternative="isBestMoveAlternative()"
             />
     </div>
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
-import { Line } from '@/position';
 import FeedbackRow from './feedback-row.vue';
 import { EClassification } from '@/types/chessboard';
+import { getAnalysisData } from './sidebar-analysis';
 
-const props = defineProps({
-    currentLine: {
-        type: Object as PropType<Line> 
-    },
-    previousLine: {
-        type: Object as PropType<Line> 
-    },
-    moveNumber: {
-        required: true,
-        type: Number
-    }
-})
+const data = getAnalysisData();
 
-function isThinking() {
-    if (props.currentLine === undefined || props.previousLine === undefined) {
+function isThinking()  {
+    if (data.currentLine === undefined || data.previousLine === undefined)
+    {
         return true;
     }
 
-    return !props.currentLine.isEvaluationFinished() || !props.previousLine.isEvaluationFinished()
+    return !data.currentLine.isEvaluationFinished() || !data.previousLine.isEvaluationFinished();
 }
 
 function isCurrentLineBestMove() {
-    return !isThinking() && props.currentLine?.lan == props.previousLine?.getBestMove();
+    return !isThinking() && data.currentLine!.lan == data.previousLine!.getBestMove();
+}
+
+function isBestMoveAlternative() {
+    return isCurrentLineBestMove() && data.currentLine!.getClassification() === EClassification.Best;
 }
 
 </script>

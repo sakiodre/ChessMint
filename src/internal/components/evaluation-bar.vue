@@ -18,17 +18,20 @@
 
 <script setup lang="ts">
 import { evaluationToString } from '@/utils/utils';
-import { ref } from 'vue'
+import { computed } from 'vue'
+import { getAnalysisData } from './sidebar-analysis';
 
-const evaluation = ref<IAbsEvaluation>({score: 0, isMate: false});
-const isFlipped = ref(false);
+const data = getAnalysisData();
 
-function update(e: IAbsEvaluation) {
-    evaluation.value = e;
-}
-function setFlipped(flip: boolean) {
-    isFlipped.value = flip;
-}
+const evaluation = computed(() => {
+    return data.currentLine?.getEvaluation() ?? { score: 0, isMate: false }
+})
+
+defineProps({
+    isFlipped: {
+        type: Boolean
+    }
+})
 
 function getTransform(evaluation: IAbsEvaluation) {
     
@@ -56,10 +59,5 @@ function getTransform(evaluation: IAbsEvaluation) {
 
     return `transform: translate3d(0px, ${percent}%, 0px)`
 }
-
-defineExpose({
-    update,
-    setFlipped
-})
 
 </script>

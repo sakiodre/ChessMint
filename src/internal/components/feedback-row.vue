@@ -10,7 +10,7 @@
         </div>
 
         <div v-else class="move-feedback-row-component">
-            <div :class="isFinished ? 'move-feedback-row-icon' : 'move-feedback-row-indicator move-feedback-row-white'" v-html="getClassificationIcon()">
+            <div :class="isFinished ? 'move-feedback-row-icon' : 'move-feedback-row-indicator move-feedback-row-white'" v-html="classificationIcon">
             </div>
 
             <div class="move-feedback-row-line">
@@ -21,7 +21,7 @@
                             <span class="move-san-san">{{ san }}</span>
                         </span>
                     </span>
-                    <div class="move-feedback-row-description move-feedback-row-colored">{{ getClassificationComment() }}</div>
+                    <div class="move-feedback-row-description move-feedback-row-colored">{{ classificationComment }}</div>
                 </div>
 
                 <div class="move-feedback-row-moves">
@@ -29,7 +29,7 @@
                         <div class="engine-line-component move-feedback-row-engine" is-expandable="false">
 
                             <span v-for="(san, index) in lineSan" class="move-san-component engine-line-node" is-expandable="false">
-                                <span v-if="moveNumber % 2 !== 0" class="move-san-premove">{{ getMoveNumberIndex(index) }} </span>
+                                <span v-if="index == 0 || (moveNumber+index) % 2 !== 0" class="move-san-premove">{{ getMoveNumberIndex(index) }}</span>
                                 <span class="move-san-highlight">
                                     <span class="move-san-san">{{ san + " " }}</span>
                                 </span>
@@ -42,14 +42,14 @@
             </div>
             <a v-if="isFinished && evaluation" 
                 class="score-text-score move-feedback-row-score"
-                :class="{ 'evaluation-lines-negative': evaluation.score < 0 }">{{ evaluationToString(evaluation) }}
+                :class="{ 'score-text-negative': evaluation.score < 0 }">{{ evaluationToString(evaluation) }}
             </a>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
+import { PropType, computed } from 'vue';
 import { EClassification } from '@/types/chessboard';
 import { Icons } from '@/assets/icons';
 import { evaluationToString } from '@/utils/utils';
@@ -82,56 +82,52 @@ const props = defineProps({
     evaluation: {
         type: Object as PropType<IAbsEvaluation>,
     },
+    isAlternative: {
+        type: Boolean,
+    }
 })
 
-function getClassificationIcon() {
-    return props.isFinished ? Icons.fromClassification(props.classification) : ""
-}
+const commentMap = new Map<EClassification, string>([
+    [EClassification.Best, "is best"],
+    [EClassification.Excellent, "is excellent"],
+    [EClassification.Good, "is good"],
+    [EClassification.Inaccuracy, "is an inaccuracy"],
+    [EClassification.Mistake, "is a mistake"],
+    [EClassification.Blunder, "is a blunder"],
+    [EClassification.Forced, "is forced"],
+    [EClassification.Brilliant, "is brilliant"],
+    [EClassification.Great, "is a great find"],
+    [EClassification.Book, "is a book move"],
+    [EClassification.Miss, "is a miss"],
+    [EClassification.MissedWin, "is a missed win"],
+]);
 
-function getMoveNumberIndex(index: number) {
-    const wholeMoveNumber = Math.floor((props.moveNumber + 1) / 2) + 1;
-    const isHalfMove = props.moveNumber % 2 == 0;
+const classificationIcon = computed(() => {
+    return props.isFinished ? Icons.fromClassification(props.classification, 26, 26) : ""
+})
 
-    if (!isHalfMove || index == 0)
+const classificationComment = computed(() =>
+{
+    if (!props.isFinished)
+        return "was played";
+
+    if (props.isAlternative)
+        return "is an alternative";
+
+    return commentMap.get(props.classification) || "";
+})
+
+function getMoveNumberIndex(index: number)
+{
+    const moveNumber = props.moveNumber + index;
+    const wholeMoveNumber = Math.floor((moveNumber + 1) / 2) + 1;
+    const isHalfMove = moveNumber % 2 == 0;
+
+    if (isHalfMove)
     {
-        let suffix = ".";
-        if (index == 0)
-        {
-            if (isHalfMove)
-            {
-                suffix = "...";
-            }
-        }
-        return `${wholeMoveNumber.toString()}${suffix} `;
+        return `${wholeMoveNumber.toString()}... `;
     }
 
-    return "";
+    return `${wholeMoveNumber.toString()}. `;
 }
-
-const getClassificationComment = (function ()
-{
-    const descriptionMap = new Map<EClassification, string>([
-        [EClassification.Best, "is best"],
-        [EClassification.Excellent, "is excellent"],
-        [EClassification.Good, "is good"],
-        [EClassification.Inaccuracy, "is an inaccuracy"],
-        [EClassification.Mistake, "is a mistake"],
-        [EClassification.Blunder, "is a blunder"],
-        [EClassification.Forced, "is forced"],
-        [EClassification.Brilliant, "is brilliant"],
-        [EClassification.Great, "is a great find"],
-        [EClassification.Book, "is a book move"],
-        [EClassification.Miss, "is a miss"],
-        [EClassification.MissedWin, "is a missed win"],
-    ]);
-
-    return (): string =>
-    {
-        if (!props.isFinished) {
-            return "was played";
-        }
-        return descriptionMap.get(props.classification) || "";
-    };
-})();
-
 </script>

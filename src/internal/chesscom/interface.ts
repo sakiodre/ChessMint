@@ -528,14 +528,14 @@ export class ChessComBoard implements IChessboard {
     ): void {
         // updating the DOM while the board is animating will make it look laggy
         // only update the analysis tools only if we've finished evaluating
-        if (
-            !this.game.isAnimating() ||
-            (line.isEvaluationFinished() &&
-                (previousLine === undefined ||
-                    previousLine.isEvaluationFinished()))
-        ) {
+        // if (
+        //     !this.game.isAnimating() ||
+        //     (line.isEvaluationFinished() &&
+        //         (previousLine === undefined ||
+        //             previousLine.isEvaluationFinished()))
+        // ) {
             this.analysis.updateLine(moveNumber, line, previousLine);
-        }
+        // }
     }
 
     public getContainer(): HTMLElement {
@@ -643,6 +643,7 @@ export class ChessComBoard implements IChessboard {
     }
 
     private onLoad(event: IGameEvent) {
+        console.log("on load", event.data);
         let lines: IGameHistory[] = event.data.line;
         let lanMoves = lines.map((line) =>
             getLAN(line.from, line.to, line.promotion)

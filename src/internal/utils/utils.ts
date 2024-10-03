@@ -5,19 +5,22 @@ export const evaluationToString = (evaluation: IAbsEvaluation, isAbbreviation:bo
 
     if (isAbbreviation === false) {
         if (evaluation.isMate) {
-            prefix = evaluation.score >= 0 ? "+M" : "-M";
+            return (
+                (evaluation.score >= 0 ? "+M" : "-M") +
+                Math.abs(evaluation.score).toString()
+            );
         } else {
-            prefix = evaluation.score >= 0 ? "+" : "-";
+            return (
+                (evaluation.score >= 0 ? "+" : "") +
+                (evaluation.score / 100).toFixed(2)
+            );
         }
     }
 
     if (evaluation.isMate) {
-        return prefix + Math.abs(evaluation.score).toString();
+        return "M" + Math.abs(evaluation.score).toString();
     } else {
-        return (
-            prefix +
-            (Math.abs(evaluation.score) / 100).toFixed(isAbbreviation ? 1 : 2)
-        );
+        return Math.abs(evaluation.score / 100).toFixed(1);
     }
 }
 
