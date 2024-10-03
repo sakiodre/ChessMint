@@ -1,12 +1,13 @@
-// alert("ok");
-// function injectScript(file: string) {
-//     let script = document.createElement("script");
-//     script.src = chrome.runtime.getURL(file);
-//     script.onload = () => script.remove();
 
-//     let doc = document.head || document.documentElement;
-//     doc.insertBefore(script, doc.firstElementChild);
-// }
+/// #if DEBUG
+const ws = new WebSocket(`ws://localhost:48152`);
+ws.addEventListener("message", (event) => {
+    if (event.data === "reload") {
+        chrome.runtime.sendMessage("reload");
+        window.location.reload();
+    }
+});
+/// #endif
 
 window.addEventListener("ChessMintCommunicationRecv", function (event) {
     let request = (event as any).detail;
@@ -15,4 +16,3 @@ window.addEventListener("ChessMintCommunicationRecv", function (event) {
         new CustomEvent("ChessMintCommunicationSend", { detail: response })
     );
 });
-// injectScript("chessmint.js");

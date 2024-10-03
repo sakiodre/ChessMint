@@ -1,6 +1,6 @@
 <template>
     <div class="evaluation-lines-lines">
-        <EvaluationLinesComponent v-if="data.currentLine" v-for="pv in data.currentLine.pvs" :pv="pv" :move-number="data.moveNumber"/>
+        <EvaluationLinesComponent v-for="pv in data.currentLine?.pvs" :pv="pv" :move-number="data.moveNumber"/>
     </div>
 </template>
 

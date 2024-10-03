@@ -4,10 +4,10 @@
             :moveNumber="data.moveNumber"
             :is-thinking="false"
             :is-finished="!isThinking()" 
-            :classification="data.currentLine.getClassification() || EClassification.Best"
-            :san="data.currentLine.san"
-            :line-san="isCurrentLineBestMove() ? data.currentLine.pvs[0]?.lineSan ?? [] : []"
-            :evaluation="data.currentLine.getEvaluation()"
+            :classification="data.currentLine!.getClassification() || EClassification.Best"
+            :san="data.currentLine!.san"
+            :line-san="isCurrentLineBestMove() ? data.currentLine!.pvs[0]?.lineSan ?? [] : []"
+            :evaluation="data.currentLine!.getEvaluation()"
             />
 
         <FeedbackRow v-if="data.moveNumber != -1 && !isCurrentLineBestMove()"

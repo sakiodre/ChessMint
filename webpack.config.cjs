@@ -1,9 +1,7 @@
 const path = require("path");
-const CopyPlugin = require("copy-webpack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
 
 module.exports = {
-    mode: "production",
     entry: {
         chessmint: ["./src/internal/main.ts"],
         loader: ["./src/content-scripts/loader.ts"],
@@ -27,9 +25,6 @@ module.exports = {
     },
     plugins: [
         new VueLoaderPlugin(),
-        new CopyPlugin({
-            patterns: [{ from: "./public" }],
-        }),
     ],
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
