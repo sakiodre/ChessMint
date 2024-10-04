@@ -2,7 +2,9 @@ import { Chess } from "chess.js";
 import { ENGINE_MULTI_PV, IEnginePv } from "./engine";
 import { Analyser } from "./analyser";
 import { EClassification, IChessboard } from "./types/chessboard";
+import eco from "./assets/ecotable.json";
 
+const ecoTable = eco as string[];
 export interface IPrincipalVariation extends IEnginePv {
     san: TSANotation;
     lineSan: TSANotation[];
@@ -45,8 +47,9 @@ export class Line {
         san: TSANotation,
         legalMoves: TSANotation[]
     ) {
+        const shortFen = fen.split(" ").slice(0, 3).join(" ");
         this.pvs = [];
-        this.isInTheory = false;
+        this.isInTheory = ecoTable.find((f) => f == shortFen) !== undefined;
         this.fen = fen;
         this.lan = lan;
         this.san = san;

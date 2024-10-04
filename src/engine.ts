@@ -1,6 +1,9 @@
 export interface IEnginePv {
     lan: TLANotation;
     line: TLANotation[];
+    from: TSquare;
+    to: TSquare;
+    promotion?: TPromotionPiece;
     depth: number;
     seldepth: number;
     multipv: number;
@@ -174,14 +177,22 @@ export class Engine {
 
             if (match && match.groups) {
                 if (!this.isRequestedStop) {
-                    let line = match.groups["pv"].split(" ") as TLANotation[];
-                    let score = parseInt(match.groups["score"]);
-                    let absoluteScore =
+                    const line = match.groups["pv"].split(" ") as TLANotation[];
+                    const score = parseInt(match.groups["score"]);
+                    const absoluteScore =
                         this.currentMoveNumber % 2 == 0 ? -score : score;
 
+                    const promotion =
+                        line[0].length == 5
+                            ? (line[0].substring(4, 5) as TPromotionPiece)
+                            : undefined;
+                    
                     let pv: IEnginePv = {
                         lan: line[0],
                         line: line,
+                        from: line[0].substring(0, 2) as TSquare,
+                        to: line[0].substring(2, 4) as TSquare,
+                        promotion: promotion,
                         depth: parseInt(match.groups["depth"]),
                         seldepth: parseInt(match.groups["seldepth"]),
                         multipv: parseInt(match.groups["multipv"]),

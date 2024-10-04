@@ -37,6 +37,11 @@ export interface IChessboard {
     drawArrow(arrow: IChessboardArrow): void;
     drawEffect(effect: IChessboardEffect): void;
     drawClassification(lan: TLANotation, classification: EClassification): void;
+    drawPromotionSquare(
+        square: TSquare,
+        piece: TPromotionPiece,
+        color: TPieceColor
+    ): void;
     getContainer(): HTMLElement;
     updateLine(moveNumber: number, line: Line, previousLine?: Line): void;
 }

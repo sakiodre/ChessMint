@@ -21,6 +21,10 @@ module.exports = {
                 test: /\.vue$/,
                 loader: "vue-loader"
             },
+            {
+                test: /\.(txt|svg)$/i,
+                type: 'asset/source',
+            }
         ],
     },
     plugins: [

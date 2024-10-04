@@ -1,5 +1,5 @@
 import { Line } from "./position";
-import { IChessboard, EClassification } from "./types/chessboard";
+import { EClassification, IChessboard } from "./types/chessboard";
 
 
 export class Analyser {
@@ -19,14 +19,18 @@ export class Analyser {
 
         // draw arrows, in reverse so best move appears on top
         for (let idx = currentLine.pvs.length - 1; idx >= 0; idx--) {
-            let pv = currentLine.pvs[idx];
+            const pv = currentLine.pvs[idx];
             if (pv.depth < currentLine.pvs[0].depth) continue;
 
             this.board.drawArrow({
-                from: pv.lan.substring(0, 2) as TSquare,
-                to: pv.lan.substring(2, 4) as TSquare,
+                from: pv.from,
+                to: pv.to,
                 color: idx == 0 ? "Best" : "Excellent",
             });
+
+            if (pv.promotion) {
+                this.board.drawPromotionSquare(pv.to, pv.promotion, currentLine.turn);
+            }
         }
 
         const evaluation = currentLine.getEvaluation();
@@ -35,8 +39,11 @@ export class Analyser {
         if (previousLine) {
             let classification: EClassification;
             const previousClassification = previousLine.getClassification();
-
-            if (previousLine.legalMoves.length == 1) {
+            
+            if (currentLine.isInTheory) {
+                classification = EClassification.Book;
+            }
+            else if (previousLine.legalMoves.length == 1) {
                 classification = EClassification.Forced;
             }
             else if (currentLine.lan == previousLine.getBestMove()) {

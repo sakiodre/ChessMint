@@ -1,7 +1,8 @@
 import { Engine, IEnginePv } from './engine';
 import { Position } from './position';
-import { ChessComBoard } from './chesscom/interface';
+import { ChessComBoard } from './chesscom/board';
 import { IChessboard } from './types/chessboard';
+import { Chess } from 'chess.js';
 
 class ChessMint {
     private readonly board: IChessboard;

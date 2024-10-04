@@ -1,0 +1,15 @@
+<svg width="100%" height="100%" viewBox="0 0 18 19">
+    <g id="missed_win">
+        <g>
+            <path class="icon-shadow" opacity="0.3" d="M9,.5a9,9,0,1,0,9,9A9,9,0,0,0,9,.5Z"></path>
+            <path class="icon-background" fill="#dbac16" d="M9,0a9,9,0,1,0,9,9A9,9,0,0,0,9,0Z"></path>
+        </g>
+        <g>
+            <g class="icon-component-shadow" opacity="0.2">
+                <rect x="2.74" y="8.1" width="12.51" height="3.11" rx="0.36"></rect>
+            </g>
+            <rect class="icon-component" fill="#fff" x="2.74" y="7.6" width="12.51" height="3.11"
+                rx="0.36"></rect>
+        </g>
+    </g>
+</svg>

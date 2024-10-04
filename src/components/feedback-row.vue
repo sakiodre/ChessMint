@@ -50,9 +50,9 @@
 
 <script setup lang="ts">
 import { PropType, computed } from 'vue';
-import { EClassification } from '@/types/chessboard';
 import { Icons } from '@/assets/icons';
 import { evaluationToString } from '@/utils/utils';
+import { EClassification } from '@/types/chessboard';
 
 const props = defineProps({
     moveNumber: {
