@@ -3,12 +3,12 @@ import { Position } from './position';
 import { ChessComBoard } from './chesscom/interface';
 import { IChessboard } from './types/chessboard';
 
-class BetterMint {
+class ChessMint {
     private readonly board: IChessboard;
     private readonly engine: Engine;
     private readonly position: Position;
 
-    private readonly depth: number = 18;
+    private readonly depth: number = 16;
 
     constructor(chessBoard: HTMLElement) {
         this.board = new ChessComBoard(chessBoard, this);
@@ -34,8 +34,10 @@ class BetterMint {
     }
 
     public onMove(lan: TLANotation) {
-        this.position.move(lan);
-        this.engine.go(this.position.getLanMoves(), this.depth);
+        const line = this.position.move(lan);
+        if (!line.isGameOver()) {
+            this.engine.go(this.position.getLanMoves(), this.depth);
+        }
     }
 
     public onSelectNode(moveNumber: number) {
@@ -82,7 +84,7 @@ class BetterMint {
 }
 
 function Initialize(chessBoard: HTMLElement) {
-    new BetterMint(chessBoard);
+    new ChessMint(chessBoard);
 }
 
 const observer = new MutationObserver(async function (mutations) {

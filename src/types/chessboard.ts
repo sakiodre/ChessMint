@@ -1,4 +1,4 @@
-import { IPrincipalVariation, Line } from "../position";
+import { Line } from "../position";
 
 export enum EClassification {
     Best,
@@ -38,5 +38,5 @@ export interface IChessboard {
     drawEffect(effect: IChessboardEffect): void;
     drawClassification(lan: TLANotation, classification: EClassification): void;
     getContainer(): HTMLElement;
-    updateEvaluation(moveNumber: number, line: Line, previousLine?: Line): void;
+    updateLine(moveNumber: number, line: Line, previousLine?: Line): void;
 }

@@ -24,7 +24,7 @@ function modifyManifest(content) {
     var manifest = JSON.parse(content.toString());
 
     manifest.background = {
-        service_worker: "background.js"
+        service_worker: "service-worker.js"
     }
 
     return JSON.stringify(manifest, null, 2);
@@ -35,7 +35,7 @@ module.exports = merge(config, {
     devtool: "inline-source-map",
     watch: true,
     entry: {
-        background: ["./src/background.ts"],
+        "service-worker": ["./src/extension/service-worker.ts"],
     },
     module: {
         rules: [

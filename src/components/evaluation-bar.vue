@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { evaluationToString } from '@/utils/utils';
 import { computed } from 'vue'
-import { getAnalysisData } from './sidebar-analysis';
+import { getAnalysisData } from './analysis';
 
 const data = getAnalysisData();
 

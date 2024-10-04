@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import EvaluationLinesComponent from './evaluation-lines-component.vue';
-import { getAnalysisData } from './sidebar-analysis';
+import { getAnalysisData } from './analysis';
 
 const data = getAnalysisData();
 

@@ -12,7 +12,7 @@
     "content_scripts": [
         {
             "js": [
-                "loader.js"
+                "content-script.js"
             ],
             "css": [
                 "css/chesscom/evaluation-bar.css",

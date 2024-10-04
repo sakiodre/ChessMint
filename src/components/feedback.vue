@@ -24,9 +24,9 @@
 </template>
 
 <script setup lang="ts">
-import FeedbackRow from './feedback-row.vue';
 import { EClassification } from '@/types/chessboard';
-import { getAnalysisData } from './sidebar-analysis';
+import { getAnalysisData } from './analysis';
+import FeedbackRow from './feedback-row.vue';
 
 const data = getAnalysisData();
 

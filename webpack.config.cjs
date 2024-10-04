@@ -3,8 +3,8 @@ const { VueLoaderPlugin } = require("vue-loader");
 
 module.exports = {
     entry: {
-        chessmint: ["./src/internal/main.ts"],
-        loader: ["./src/content-scripts/loader.ts"],
+        chessmint: ["./src/main.ts"],
+        "content-script": ["./src/extension/content-script.ts"],
     },
     module: {
         rules: [
@@ -30,7 +30,7 @@ module.exports = {
         extensions: [".tsx", ".ts", ".js"],
         alias: {
             "vue": "vue/dist/vue.esm-browser.prod.js",
-            "@": path.resolve(__dirname, "src/internal")
+            "@": path.resolve(__dirname, "src")
         }
     },
     output: {

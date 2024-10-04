@@ -11,10 +11,10 @@
 <script setup lang="ts">
 import { provide, reactive, ref } from 'vue';
 import { Line } from '@/position';
+import { AnalysisData } from './analysis';
 import EvaluationLines from './evaluation-lines.vue';
 import Feedback from './feedback.vue';
 import EvaluationBar from './evaluation-bar.vue';
-import { AnalysisData } from './sidebar-analysis';
 
 // const feedback = ref< InstanceType<typeof Feedback>>();
 

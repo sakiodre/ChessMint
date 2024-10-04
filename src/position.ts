@@ -179,6 +179,10 @@ export class Line {
         return this.accuracy;
     }
 
+    public isGameOver() {
+        return this.legalMoves.length == 0
+    }
+
     public findPv(lan: TLANotation) {
         return this.pvs.find((pv) => {
             return pv.lan == lan;
@@ -292,9 +296,11 @@ export class Position {
     }
 
     public move(lan: TLANotation) {
-        let m = this.chess.move(lan);
-        this.lines.push(new Line(m.after, lan, m.san, this.chess.moves()));
+        const m = this.chess.move(lan);
+        const line = new Line(m.after, lan, m.san, this.chess.moves());
+        this.lines.push(line);
         this.currentNode = this.lines.length - 1;
+        return line;
     }
 
     public getLine(moveNumber: number) {

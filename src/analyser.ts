@@ -72,7 +72,7 @@ export class Analyser {
             this.board.drawClassification(currentLine.lan, classification);
         }
 
-        this.board.updateEvaluation(moveNumber, currentLine, previousLine);
+        this.board.updateLine(moveNumber, currentLine, previousLine);
     }
 }
 

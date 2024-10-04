@@ -1,6 +1,6 @@
 import { IPrincipalVariation, Line } from "../position";
 import { EClassification, IChessboard, IChessboardArrow, IChessboardEffect, IChessboardHandler } from "../types/chessboard";
-import { AnalysisUI } from "./ui";
+import { AnalysisUI } from "../analysis-ui";
 
 type TEventType =
     | "all"
@@ -521,7 +521,7 @@ export class ChessComBoard implements IChessboard {
         // };
     }
 
-    public updateEvaluation(
+    public updateLine(
         moveNumber: number,
         line: Line,
         previousLine?: Line
