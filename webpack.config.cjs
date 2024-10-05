@@ -1,9 +1,11 @@
 const path = require("path");
 const { VueLoaderPlugin } = require("vue-loader");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
         chessmint: ["./src/main.ts"],
+        popup: ["./src/extension/popup/index.ts"],
         "content-script": ["./src/extension/content-script.ts"],
     },
     module: {
@@ -14,8 +16,15 @@ module.exports = {
                 include: path.resolve(__dirname, 'src'),
                 exclude: /node_modules/,
                 options: {
-                    appendTsSuffixTo: [/\.vue$/]
+                    appendTsSuffixTo: [/\.(vue)$/]
                 }
+            },
+            {
+                test: /\.css$/i,
+                use: [
+                    'style-loader',
+                    'css-loader'
+                ]
             },
             {
                 test: /\.vue$/,
@@ -24,11 +33,24 @@ module.exports = {
             {
                 test: /\.(txt|svg)$/i,
                 type: 'asset/source',
-            }
+            },
+            {
+                test: /\.(png|jpg)$/i,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'static/[hash][ext][query]'
+                }
+            },
         ],
     },
     plugins: [
         new VueLoaderPlugin(),
+        new HtmlWebpackPlugin({
+            chunks: ["popup"],
+            filename: "popup.html",
+            template: path.resolve(__dirname, "src/extension/popup/index.html"),
+            cache: true,
+        })
     ],
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
