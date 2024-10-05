@@ -2,7 +2,7 @@ import { Engine, IEnginePv } from './engine';
 import { Position } from './position';
 import { ChessComBoard } from './chesscom/board';
 import { IChessboard } from './types/chessboard';
-import { Chess } from 'chess.js';
+import { optionsRegisterInjectedScript } from './options';
 
 class ChessMint {
     private readonly board: IChessboard;
@@ -85,6 +85,9 @@ class ChessMint {
 }
 
 function Initialize(chessBoard: HTMLElement) {
+    
+    optionsRegisterInjectedScript();
+    
     new ChessMint(chessBoard);
     setTimeout(() => {
         

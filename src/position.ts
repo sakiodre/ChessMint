@@ -3,6 +3,7 @@ import { ENGINE_MULTI_PV, IEnginePv } from "./engine";
 import { Analyser } from "./analyser";
 import { EClassification, IChessboard } from "./types/chessboard";
 import eco from "./assets/ecotable.json";
+import { onOptionsUpdated, options } from "./options";
 
 const ecoTable = eco as string[];
 export interface IPrincipalVariation extends IEnginePv {
@@ -288,6 +289,10 @@ export class Position {
             this.chess.moves()
         );
         this.newGame();
+        
+        onOptionsUpdated(() => {
+            this.updateAnalyser(this.currentNode);
+        });
     }
 
     public newGame() {

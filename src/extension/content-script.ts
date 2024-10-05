@@ -1,3 +1,4 @@
+import { options, optionsRegisterContentScript } from "@/options";
 
 /// #if DEBUG
 const ws = new WebSocket(`ws://localhost:48152`);
@@ -8,11 +9,5 @@ ws.addEventListener("message", (event) => {
     }
 });
 /// #endif
-
-window.addEventListener("ChessMintCommunicationRecv", function (event) {
-    let request = (event as any).detail;
-    let response = { requestId: request.id, data: "hello world" };
-    window.dispatchEvent(
-        new CustomEvent("ChessMintCommunicationSend", { detail: response })
-    );
-});
+console.log("from content", options);
+optionsRegisterContentScript();

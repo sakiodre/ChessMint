@@ -1,20 +1,22 @@
 <template>
-    <div role="tablist" class="tabs-component">
-        <div
-            v-for="tab in tabs"
-            @click="selectedTabId = tab.id"
-            class="tabs-tab"
-            :class="{ 'tabs-active': selectedTabId == tab.id }"
-            role="tab"
-            tabindex="0"
-        >
-            <div class="tabs-icon" v-html="tab.icon"></div>
+    <div class="tabs-container">
+        <div role="tablist" class="tabs-component">
+            <div
+                v-for="tab in tabs"
+                @click="selectedTabId = tab.id"
+                class="tabs-tab"
+                :class="{ 'tabs-active': selectedTabId == tab.id }"
+                role="tab"
+                tabindex="0"
+            >
+                <div class="tabs-icon" v-html="tab.icon" :style="selectedTabId == tab.id ? 'fill: #ffffff' : 'fill: #afafaf'"></div>
 
-            <span class="tabs-label">{{ tab.title }}</span>
+                <span class="tabs-label">{{ tab.title }}</span>
+            </div>
         </div>
-    </div>
-    <div class="tab-content-component" role="tabpanel">
-        <component v-if="selectedTab" :is="selectedTab!.component"></component>
+        <div v-for="tab in tabs" v-show="selectedTabId == tab.id" class="tab-content-component" role="tabpanel">
+            <component :is="tab!.component"></component>
+        </div>
     </div>
 </template>
 
@@ -44,66 +46,67 @@ const selectedTab = computed(() => {
 });
 </script>
 
-<style>
-:root {
-    --primary-color: #ffffff;
-    --primary-color-inactive: #afafaf;
+<style scoped lang="scss">
+$primary-color: #ffffff;
+$primary-color-inactive: #afafaf;
+
+.tabs-container {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+
+    .tabs-component {
+        display: flex;
+        flex: 0 1 auto;
+    }
+
+    .tab-content-component {
+        display: flex;
+        flex: 1 1 0;
+        flex-direction: column;
+        min-height: 0;
+        padding: 0.5rem 1rem;
+        overflow-y: scroll;
+    }
 }
+
 .tabs-component {
-    display: flex;
-    flex: 0 0 auto;
-}
+    .tabs-tab {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        flex: 1 1 0;
+        flex-direction: column;
+        gap: 0.4rem;
+        justify-content: center;
+        min-width: 0;
+        padding: 0.8rem 0 0.8rem 0;
+        position: relative;
+                    
+        &.tabs-active {
+            cursor: default;
+            color: $primary-color;
+        }
 
-.tabs-tab {
-    align-items: center;
-    cursor: pointer;
-    display: flex;
-    flex: 1 1 0;
-    flex-direction: column;
-    gap: 0.4rem;
-    justify-content: center;
-    min-width: 0;
-    padding: 0.8rem 0 0.8rem 0;
-    position: relative;
-}
+        &:not(.tabs-active) {
+            background-color: #202123;
+            color: $primary-color-inactive;
+        }
 
-.tabs-tab.tabs-active {
-    cursor: default;
-    border-radius: 100px;
-    color: var(--primary-color);
-    --tab-icon-color: var(--primary-color);
-}
+        .tabs-icon {
+            height: 1.2rem;
+        }
 
-.tabs-tab:not(.tabs-active) {
-    background-color: #202123;
-    color: var(--primary-color-inactive);
-    --tab-icon-color: var(--primary-color-inactive);
-}
-
-.tab-content-component {
-    display: flex;
-    flex: 1 1 0;
-    flex-direction: column;
-    min-height: 0;
-    padding: 0.5rem 1rem;
-}
-
-.tabs-label {
-    font-size: 0.8rem;
-    font-weight: 400;
-    line-height: 1.1;
-    overflow: hidden;
-    text-align: center;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: calc(100% - 0.8rem);
-}
-
-.tabs-icon {
-    height: 1.2rem;
-}
-
-.tabs-icon>svg>path{ /*target the image with css*/
-    fill: var(--tab-icon-color);
+        .tabs-label {
+            font-size: 0.8rem;
+            font-weight: 400;
+            line-height: 1.1;
+            overflow: hidden;
+            text-align: center;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: calc(100% - 0.8rem);
+        }
+    }
 }
 </style>

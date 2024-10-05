@@ -1,4 +1,5 @@
-import Options from "./app.vue"
+import { onOptionsUpdated, requestOptions } from "@/options";
+import App from "./app.vue"
 import { createApp } from "vue"
 
 /// #if DEBUG
@@ -10,4 +11,6 @@ ws.addEventListener("message", (event) => {
 });
 /// #endif
 
-createApp(Options).mount("#app");
+requestOptions(() => {
+    createApp(App).mount("#app");
+});

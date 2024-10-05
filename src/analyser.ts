@@ -1,3 +1,4 @@
+import { options } from "./options";
 import { Line } from "./position";
 import { EClassification, IChessboard } from "./types/chessboard";
 
@@ -17,19 +18,25 @@ export class Analyser {
     ) {
         this.board.clearMarkings();
 
-        // draw arrows, in reverse so best move appears on top
-        for (let idx = currentLine.pvs.length - 1; idx >= 0; idx--) {
-            const pv = currentLine.pvs[idx];
-            if (pv.depth < currentLine.pvs[0].depth) continue;
+        if (options.showArrows) {
+            // draw arrows, in reverse so best move appears on top
+            for (let idx = currentLine.pvs.length - 1; idx >= 0; idx--) {
+                const pv = currentLine.pvs[idx];
+                if (pv.depth < currentLine.pvs[0].depth) continue;
 
-            this.board.drawArrow({
-                from: pv.from,
-                to: pv.to,
-                color: idx == 0 ? "Best" : "Excellent",
-            });
+                this.board.drawArrow({
+                    from: pv.from,
+                    to: pv.to,
+                    color: idx == 0 ? "Best" : "Excellent",
+                });
 
-            if (pv.promotion) {
-                this.board.drawPromotionSquare(pv.to, pv.promotion, currentLine.turn);
+                if (pv.promotion) {
+                    this.board.drawPromotionSquare(
+                        pv.to,
+                        pv.promotion,
+                        currentLine.turn
+                    );
+                }
             }
         }
 
@@ -76,7 +83,10 @@ export class Analyser {
             }
 
             currentLine.setClassification(classification);
-            this.board.drawClassification(currentLine.lan, classification);
+
+            if (options.showClassification) {
+                this.board.drawClassification(currentLine.lan, classification);
+            }
         }
 
         this.board.updateLine(moveNumber, currentLine, previousLine);

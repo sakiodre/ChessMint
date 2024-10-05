@@ -1,8 +1,8 @@
 <template>
     <div class="play-controller-above-move-list">
-        <EvaluationLines/>
-        <Feedback/>
-        <Teleport v-if="evalBarContainer" :to="evalBarContainer">
+        <EvaluationLines v-if="options.showEvalLines"/>
+        <Feedback v-if="options.showFeedback"/>
+        <Teleport v-if="options.showEvalBar && evalBarContainer" :to="evalBarContainer">
             <EvaluationBar :is-flipped="isFlipped"/>
         </Teleport>
     </div>
@@ -15,6 +15,7 @@ import { AnalysisData } from './analysis';
 import EvaluationLines from './evaluation-lines.vue';
 import Feedback from './feedback.vue';
 import EvaluationBar from './evaluation-bar.vue';
+import { options } from '@/options';
 
 // const feedback = ref< InstanceType<typeof Feedback>>();
 
