@@ -29,20 +29,23 @@ function setOptions(opts: IOptions) {
     Object.assign(options, opts);
 }
 
-// request the initial options, the result should be handled by onOptionsUpdated()
 export function requestOptions(callback?: { (): void }) {
-    if (callback) {
-        onOptionsUpdated(() => {
-            callback();
-            return true;
-        });
-    }
 
     if (hasChromeStorageAccess) {
         chrome.storage.sync.get<IOptions>(options, function (opts) {
             setOptions(opts);
+            if (callback) callback();
         });
+
     } else {
+        if (callback) {
+            const listerner = () => {
+                callback();
+                window.removeEventListener("ChessMintUpdateOptions", listerner);
+            };
+            window.addEventListener("ChessMintUpdateOptions", listerner);
+        }
+
         window.dispatchEvent(new CustomEvent("ChessMintRequestOptions"));
     }
 }
@@ -51,25 +54,6 @@ export function requestOptions(callback?: { (): void }) {
 export function onOptionsUpdated(callback: FuncOptsCallback) {
     onUpdateCallbacks.push(callback);
 }
-
-watch(options, (first, second) => {
-    onUpdateCallbacks = onUpdateCallbacks.filter((callback) => callback() !== true);
-    if (hasChromeStorageAccess) {
-        chrome.storage.sync.set(options);
-    }
-    if (hasChromeTabsAccess) {
-        chrome.tabs.query({}, function (tabs) {
-            tabs.forEach(function (tab) {
-                if (tab.id) {
-                    chrome.tabs.sendMessage<IOptions>(
-                        tab.id,
-                        Object.assign({}, options)
-                    );
-                }
-            });
-        });
-    }
-});
 
 // Must be called in the content script to handle options
 // updates from the popup
@@ -122,3 +106,25 @@ export function optionsRegisterInjectedScript() {
 
     requestOptions();
 }
+
+watch(options, (first, second) => {
+    onUpdateCallbacks = onUpdateCallbacks.filter(
+        (callback) => callback() !== true
+    );
+
+    // only update the storage from popup
+    if (hasChromeTabsAccess) {
+        chrome.storage.sync.set(options);
+        chrome.tabs.query({}, function (tabs) {
+            tabs.forEach(function (tab) {
+                if (tab.id) {
+                    chrome.tabs.sendMessage<IOptions>(
+                        tab.id,
+                        Object.assign({}, options)
+                    );
+                }
+            });
+        });
+    }
+
+});
