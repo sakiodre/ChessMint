@@ -36,10 +36,10 @@ module.exports = {
                 type: 'asset/source',
             },
             {
-                test: /\.(png|jpg)$/i,
+                test: /\.(png|jpe?g|gif)$/i,
                 type: 'asset/resource',
                 generator: {
-                    filename: 'static/[hash][ext][query]'
+                    filename: 'img/[hash][ext][query]'
                 }
             },
         ],
