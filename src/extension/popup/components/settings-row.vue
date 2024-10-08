@@ -19,9 +19,10 @@ defineProps({
     display: flex;
     justify-content: space-between;
     align-items: center;
+    min-height: 3rem;
 
     .settings-field-label {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 }
 </style>

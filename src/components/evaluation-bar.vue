@@ -1,16 +1,19 @@
 <template>
-    <div class="board-layout-evaluation">
-        <div style="flex: 1 1 auto">
-            <div class="evaluation-bar-bar evaluation-bar-wide-eval-bar" :class="{'evaluation-bar-flipped': isFlipped}">
-                <span class="evaluation-bar-scoreAbbreviated" :class="evaluation.score >= 0 ? 'evaluation-bar-dark' : 'evaluation-bar-light'">{{ evaluationToString(evaluation, true) }}</span>
-                <span class="evaluation-bar-score" :class="evaluation.score >= 0 ? 'evaluation-bar-dark' : 'evaluation-bar-light'">{{ evaluationToString(evaluation, false) }}</span>
-                <div class="evaluation-bar-fill">
-                    <div class="evaluation-bar-color evaluation-bar-black"></div>
-                    <div class="evaluation-bar-color evaluation-bar-draw"></div>
-                    <div class="evaluation-bar-color evaluation-bar-white" :style="getTransform(evaluation)">
-                        <span class="evaluation-bar-critical"></span>
-                    </div>
-                </div>
+    <div :class="$style.container">
+        <div :class="[$style.bar, { [$style.flipped]: isFlipped }]">
+
+            <span :class="[$style.scoreAbbreviated, evaluation.score >= 0 ? $style.darkScore : $style.lightScore]">
+                {{ evaluationToString(evaluation, true) }}
+            </span>
+
+            <span :class="[$style.score, evaluation.score >= 0 ? $style.darkScore : $style.lightScore]">
+                {{ evaluationToString(evaluation, false) }}
+            </span>
+        
+            <div :class="$style.fill">
+                <div :class="[$style.color, $style.black]"></div>
+                <div :class="[$style.color, $style.draw]"></div>
+                <div :class="[$style.color, $style.white]" :style="getTransform(evaluation)"></div>
             </div>
         </div>
     </div>
@@ -61,3 +64,129 @@ function getTransform(evaluation: IAbsEvaluation) {
 }
 
 </script>
+
+<style module lang="scss">
+
+.container {
+    flex: 1 1 auto;
+    --barWidth: 2rem;
+}
+
+@media (min-width: 960px) {
+    .container {
+    flex: 1 1 auto;
+        --barWidth: 3rem;
+    }
+}
+
+
+.bar {
+    border-radius: .2rem;
+    height: 100%;
+    position: relative;
+    width: var(--barWidth);
+
+
+    .score {
+        display: none;
+        font-size: 1.2rem;
+        font-weight: 600;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+        padding: .5rem .2rem;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+        z-index: 2;
+    }
+
+    .scoreAbbreviated {
+        font-size: 1rem;
+        font-weight: 600;
+        padding: .5rem 0;
+        position: absolute;
+        text-align: center;
+        white-space: pre;
+        width: 100%;
+        z-index: 2;
+    }
+
+    .darkScore {
+        bottom: 0;
+        color: #403d39
+    }
+
+    .lightScore {
+        color: #ffffff;
+        top: 0
+    }
+    
+    .fill {
+        background-color: hsla(0,0%,100%,.05);
+        border-radius: .2rem;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+        z-index: -1;
+        
+        .color {
+            bottom: 0;
+            height: 100%;
+            left: 0;
+            position: absolute;
+            transition: transform 1s ease-in;
+            width: 100%;
+
+            &.black {
+                background-color: #403d39;
+                z-index: 1;
+            }
+            &.draw {
+                background-color: #777574;
+                z-index: 0;
+            }
+
+            &.white {
+                background-color: #ffffff;
+                z-index: 2;
+            }
+        }
+    }
+    
+    &:hover .score {
+        border-radius: .3rem;
+        bottom: auto;
+        display: block;
+        font-weight: 700;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+        padding: .1rem .5rem;
+        position: absolute;
+        text-align: center;
+        top: 50%;
+        transform: translate(calc(var(--barWidth)/2 - 50%), -50%) var(--scoreTransform, rotate(0deg));
+        transition: opacity .2s;
+        transition-delay: .1s;
+        width: 4.5rem;
+        z-index: 2
+    }
+
+    &:hover .score.darkScore {
+        background-color: #fff;
+        color: #403d39
+    }
+
+    &:hover .score.lightScore {
+        background-color: #403d39;
+        color: #fff;
+    }
+    
+    &.flipped, &.flipped .scoreAbbreviated {
+        transform: rotate(180deg);
+        --scoreTransform: rotate(180deg);
+    }
+}
+
+
+</style>

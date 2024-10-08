@@ -26,6 +26,9 @@ const REGEX_BESTMOVE = /^bestmove (?<bestmove>[a-h][1-8][a-h][1-8][qrbn]?)?/;
 const REGEX_PV =
     /^info depth (?<depth>\d+) seldepth (?<seldepth>\d+) multipv (?<multipv>\d+) score (?<scoreType>cp|mate) (?<score>-?\d+) nodes (?<nodes>-?\d+) nps (?<nps>\d+)(?:.*?) pv (?<pv>.+)/;
 
+// chess.com hook Worker, this is to avoid it from happening
+const OriginalWorker = window.Worker;
+
 export class Engine {
     private readonly handler: IEngineHandler;
     private readonly worker: Worker;
@@ -67,7 +70,7 @@ export class Engine {
         this.options["Ponder"] = true;
 
         try {
-            this.worker = new Worker(stockfishJsURL);
+            this.worker = new OriginalWorker(stockfishJsURL);
             this.worker.onmessage = (e) => {
                 this.ProcessMessage(e);
             };

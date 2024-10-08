@@ -37,22 +37,23 @@ function expandLine()
 
 function getSanNode(san: TSANotation, index: number)
 {
-    const wholeMoveNumber = Math.floor((props.moveNumber + 1) / 2) + 1;
-    const isHalfMove = props.moveNumber % 2 == 0;
+    const moveNumber = props.moveNumber + index;
+    const wholeMoveNumber = Math.floor((moveNumber + 1) / 2) + 1;
+    const isHalfMove = moveNumber % 2 == 0;
 
     let text = "";
 
     if (!isHalfMove || index == 0)
     {
-        text = wholeMoveNumber.toString() + ".";
         if (index == 0 && isHalfMove)
         {
-            text += "..";
+            text = wholeMoveNumber.toString() + "... ";
+        } else {
+            text = wholeMoveNumber.toString() + ". ";
         }
     }
 
     return text + san + " ";
 }
-
 
 </script>

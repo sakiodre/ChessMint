@@ -1,10 +1,13 @@
 :root {
-  color-scheme: dark;
+    color-scheme: dark;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
 }
 
 /* custom scrollbar */
 ::-webkit-scrollbar {
-    width: 16px;
+    width: 0.3rem;
 }
 
 ::-webkit-scrollbar-track {
@@ -13,8 +16,6 @@
 
 ::-webkit-scrollbar-thumb {
     background-color: #7f7f7f;
-    border-radius: 20px;
-    border: 6px solid transparent;
     background-clip: content-box;
 }
 

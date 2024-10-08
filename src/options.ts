@@ -9,6 +9,11 @@ export interface IOptions {
     showEvalBar: boolean;
     showEvalLines: boolean;
     showFeedback: boolean;
+    multiPv: number;
+
+    engineDepth: number;
+    engineThreads: number;
+    engineHash: number;
 }
 
 const hasChromeStorageAccess = chrome && chrome.storage && chrome.storage.sync;
@@ -22,6 +27,11 @@ export const options = reactive<IOptions>({
     showEvalBar: true,
     showEvalLines: true,
     showFeedback: true,
+    multiPv: 3,
+    
+    engineDepth: 15,
+    engineThreads: 4,
+    engineHash: 1024,
 });
 
 function setOptions(opts: IOptions) {
@@ -59,7 +69,6 @@ export function onOptionsUpdated(callback: FuncOptsCallback) {
 // updates from the popup
 export function optionsRegisterContentScript() {
 
-    console.log("content script", chrome.tabs);
     if (!hasChromeStorageAccess) {
         throw "method should only be called from content script";
     }
@@ -121,7 +130,7 @@ watch(options, (first, second) => {
                     chrome.tabs.sendMessage<IOptions>(
                         tab.id,
                         Object.assign({}, options)
-                    );
+                    ).catch(() => {})
                 }
             });
         });

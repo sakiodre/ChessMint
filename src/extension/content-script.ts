@@ -1,6 +1,6 @@
 import { options, optionsRegisterContentScript } from "@/options";
 
-/// #if DEBUG
+/// #if DEVELOPMENT
 const ws = new WebSocket(`ws://localhost:48152`);
 ws.addEventListener("message", (event) => {
     if (event.data === "reload") {
@@ -9,5 +9,4 @@ ws.addEventListener("message", (event) => {
     }
 });
 /// #endif
-console.log("from content", options);
 optionsRegisterContentScript();

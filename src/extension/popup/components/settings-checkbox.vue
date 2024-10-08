@@ -21,6 +21,13 @@ function updateValue(event: Event) {
 
 </script>
 <style scoped lang="scss">
+@import "../global.scss";
+
+$slider-width: 3.5rem;
+$slider-height: 2rem;
+$thumb-padding: $slider-height * 0.1;
+$thumb-size: $slider-height - $thumb-padding;
+
 .toggle {
     input[type=checkbox] {
         display: none;
@@ -31,42 +38,38 @@ function updateValue(event: Event) {
     display: block;
     position: relative;
     flex: none;
-    width: 50px;
-    height: 30px;
-    border-radius: 30px;
-    background-color: #7f7f7f;
+    width: $slider-width;
+    height: $slider-height;
+    border-radius: $slider-height;
+    background-color: $border-color-dark;
     cursor: pointer;
-    transition: all 0.1s ease-in-out;
     z-index: 1;
-    margin: 10px;
 
     &::before,
     &::after {
         content: ' ';
         display: block;
         position: absolute;
-        top: 1px;
-        border-radius: 30px;
-        height: 28px;
-        background-color: #fff;
-        transform: translate3d(0, 0, 0);
-        transition: 0.2s cubic-bezier(0, 1.1, 1, 1.1);
+        top: ($slider-height - $thumb-size) * 0.5;
+        border-radius: $slider-height;
+        height: $thumb-size;
+        background-color: $font-color;
+        transform: translate3d($thumb-padding * 0.5, 0, 0);
+        transition: 0.1s cubic-bezier(0, 1.1, 1, 1.1);
         ;
     }
 
     &::before {
         z-index: -1;
-        width: 48px;
-        right: 1px;
+        width: $slider-width - $thumb-padding * 2;
+        right: $thumb-padding * 0.5;
         transform: scale(1);
-        background-color: #3f3f3f;
+        background-color: $button-background;
     }
 
     &::after {
         z-index: 1;
-        width: 28px;
-        left: 1px;
-        box-shadow: 0 1px 4px 0.5px rgba(0, 0, 0, 0.25);
+        width: $thumb-size;
     }
 
     input:checked+& {
@@ -77,7 +80,7 @@ function updateValue(event: Event) {
         }
 
         &::after {
-            transform: translate3d(20px, 0, 0);
+            transform: translate3d($slider-width - $thumb-size - $thumb-padding * 0.5, 0, 0);
         }
     }
 }

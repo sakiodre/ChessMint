@@ -47,8 +47,7 @@ const selectedTab = computed(() => {
 </script>
 
 <style scoped lang="scss">
-$primary-color: #ffffff;
-$primary-color-inactive: #afafaf;
+@import "../global.scss";
 
 .tabs-container {
     display: flex;
@@ -66,7 +65,7 @@ $primary-color-inactive: #afafaf;
         flex-direction: column;
         min-height: 0;
         padding: 0.5rem 1rem;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 }
 
@@ -85,12 +84,12 @@ $primary-color-inactive: #afafaf;
                     
         &.tabs-active {
             cursor: default;
-            color: $primary-color;
+            color: $font-color;
         }
 
         &:not(.tabs-active) {
-            background-color: #202123;
-            color: $primary-color-inactive;
+            background-color: $header-background;
+            color: $font-color-inactive;
         }
 
         .tabs-icon {

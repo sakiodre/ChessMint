@@ -120,7 +120,17 @@ export class ChessComBoard implements IChessboard {
         this.handler = handler;
 
         this.analysis = new AnalysisUI();
-        this.analysis.mountEvalbar(this.board.parentElement!);
+
+        // create a container to mount the evaluation bar, this is site-specific
+        // so we don't leave this element in our vue component
+        const evalContainer = document.createElement("div");
+        evalContainer.classList.add("board-layout-evaluation");
+        this.board.parentElement!.insertBefore(
+            evalContainer,
+            this.board.parentElement!.firstElementChild
+        );
+        
+        this.analysis.mountEvalbar(evalContainer);
 
         this.game.on("Move", (event) => this.onMove(event));
         this.game.on("Load", (event) => this.onLoad(event));
