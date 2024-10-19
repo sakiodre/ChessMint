@@ -1,5 +1,5 @@
 import { Chess } from "chess.js";
-import { ENGINE_MULTI_PV, IEnginePv } from "./engine";
+import { IEnginePv, MIN_ENGINE_MULTI_PV } from "./engine";
 import { Analyser } from "./analyser";
 import { EClassification, IChessboard } from "./types/chessboard";
 import eco from "./assets/ecotable.json";
@@ -111,13 +111,20 @@ export class Line {
 
         // purge pv that has depth lower than best move depth - 2
         const bestMoveDepth = this.pvs[0].depth;
+        const engineMultiPv = Math.max(options.multiPv, MIN_ENGINE_MULTI_PV);
+        
         let numPvAtBestMoveDepth = 1;
         let purgeIndex = -1;
 
         for (let idx = 1; idx < this.pvs.length; idx++) {
+
             if (this.pvs[idx].depth == bestMoveDepth){
                 numPvAtBestMoveDepth++;
-                if (numPvAtBestMoveDepth == ENGINE_MULTI_PV || numPvAtBestMoveDepth == this.legalMoves.length) {
+
+                if (
+                    numPvAtBestMoveDepth == engineMultiPv ||
+                    numPvAtBestMoveDepth == this.legalMoves.length
+                ) {
                     purgeIndex = idx + 1;
                     break;
                 }
@@ -207,6 +214,7 @@ export class Line {
     public getBestPv() {
         return this.pvs.length > 0 ? this.pvs[0] : undefined;
     }
+
     // https://lichess.org/page/accuracy
     private updateWinChance() {
         if (this.pvs.length == 0) {

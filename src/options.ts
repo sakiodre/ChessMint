@@ -14,6 +14,8 @@ export interface IOptions {
     engineDepth: number;
     engineThreads: number;
     engineHash: number;
+    engineUseExternal: boolean;
+    engineExternalPort: number;
 }
 
 const hasChromeStorageAccess = chrome && chrome.storage && chrome.storage.sync;
@@ -28,10 +30,12 @@ export const options = reactive<IOptions>({
     showEvalLines: true,
     showFeedback: true,
     multiPv: 3,
-    
+
     engineDepth: 15,
     engineThreads: 4,
     engineHash: 1024,
+    engineUseExternal: false,
+    engineExternalPort: 8000,
 });
 
 function setOptions(opts: IOptions) {
@@ -99,8 +103,7 @@ export function optionsRegisterContentScript() {
 
 // Must be called in the inject script to handle options
 // updates from the content script
-export function optionsRegisterInjectedScript() {
-    
+export function optionsRegisterInjectedScript(callback?: { (): void }) {
     if (hasChromeStorageAccess) {
         throw "method should only be called from injected script";
     }
@@ -113,7 +116,7 @@ export function optionsRegisterInjectedScript() {
         }
     );
 
-    requestOptions();
+    requestOptions(callback);
 }
 
 watch(options, (first, second) => {

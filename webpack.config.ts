@@ -57,7 +57,7 @@ export default (env: { [index: string]: boolean }) => {
     };
 
     const ruleTypeScript: RuleSetRule = {
-        test: /\.tsx?$/,
+        test: /\.tsx?$/i,
         include: path.resolve(__dirname, "src"),
         exclude: /node_modules/,
         use: [

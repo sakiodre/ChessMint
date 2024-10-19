@@ -7,7 +7,7 @@
         "48": "img/logo-48.png",
         "128": "img/logo-128.png"
     },
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "Help you with chess",
     "content_scripts": [
         {
@@ -32,16 +32,6 @@
             ],
             "run_at": "document_start",
             "world": "MAIN"
-        }
-    ],
-    "web_accessible_resources": [
-        {
-            "resources": [
-                "chessmint.js"
-            ],
-            "matches": [
-                "https://www.chess.com/*"
-            ]
         }
     ],
     "permissions": [

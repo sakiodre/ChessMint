@@ -4,7 +4,7 @@
         <div :class="$style.header">
             <img :class="$style.logo" src="./logo-h.png" alt="ChessMint" />
             <span :class="$style.title">ChessMint</span>
-            <span :class="$style.version">v2.0.0</span>
+            <span :class="$style.version">v2 BETA</span>
             <a :class="$style.github" href="https://github.com/thedemons/ChessMint" target="_blank">
                 <svg width="100%" height="100%" viewBox="0 0 98 98" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd"

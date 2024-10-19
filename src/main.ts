@@ -9,8 +9,6 @@ class ChessMint {
     private readonly engine: Engine;
     private readonly position: Position;
 
-    private readonly depth: number = 16;
-
     constructor(chessBoard: HTMLElement) {
         this.board = new ChessComBoard(chessBoard, this);
         this.position = new Position(this.board);
@@ -29,7 +27,6 @@ class ChessMint {
         if (lastLine && !lastLine.isEvaluationFinished()) {
             this.engine.go(
                 this.position.getLanMovesAtNode(currentMoveNumber - 1),
-                this.depth
             );
         }
     }
@@ -37,7 +34,7 @@ class ChessMint {
     public onMove(lan: TLANotation) {
         const line = this.position.move(lan);
         if (!line.isGameOver()) {
-            this.engine.go(this.position.getLanMoves(), this.depth);
+            this.engine.go(this.position.getLanMoves());
         }
     }
 
@@ -47,7 +44,6 @@ class ChessMint {
             if (!line.isEvaluationFinished()) {
                 this.engine.go(
                     this.position.getLanMovesAtNode(moveNumber),
-                    this.depth
                 );
             } else {
                 this.evaluatePreviousLineIfNeeded(moveNumber);
@@ -68,7 +64,7 @@ class ChessMint {
             this.position.move(lan);
         });
 
-        this.engine.go(this.position.getLanMoves(), this.depth);
+        this.engine.go(this.position.getLanMoves());
     }
 
     public onUpdatePv(moveNumber: number, pv: IEnginePv) {
@@ -86,42 +82,11 @@ class ChessMint {
 
 function Initialize(chessBoard: HTMLElement) {
     
-    optionsRegisterInjectedScript();
-    
-    new ChessMint(chessBoard);
-    setTimeout(() => {
-        
-    const searchedObjs: any[] = [];
-        function findVueComponent(obj: any, prefix: string) {
-            if (searchedObjs.find((o) => o === obj) !== undefined) {
-                return;
-            }
-
-            searchedObjs.push(obj);
-
-            if (obj.selectedTab === "newGame") {
-                console.log(prefix);
-                console.log(obj);
-            }
-            // if (
-            //     obj.props !== undefined &&
-            //     obj.props !== null &&
-            //     obj.props.selectedTab !== undefined
-            // ) {
-            //     console.log(prefix)
-            //     console.log(obj);
-            // }
-
-            Object.keys(obj).forEach((key) => {
-                if (obj[key] !== null && obj[key] !== undefined)
-                    findVueComponent(obj[key], prefix + "." + key);
-            });
-        }
-        // const allElements: any[] = Array.from(document.querySelectorAll("*"));
-        // const app = allElements.find((e) => e.__vue_app__).__vue_app__;
-        const app = document.querySelector("#board-layout-sidebar");
-        findVueComponent(app, "app");
-    }, 1000);
+    // register the options update handler then wait for options
+    // to arrive first then initialize the script
+    optionsRegisterInjectedScript(() => {
+        new ChessMint(chessBoard);
+    });
 }
 
 const observer = new MutationObserver(async function (mutations) {

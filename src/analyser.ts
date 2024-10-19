@@ -20,10 +20,9 @@ export class Analyser {
 
         if (options.showArrows) {
             // draw arrows, in reverse so best move appears on top
-            for (let idx = currentLine.pvs.length - 1; idx >= 0; idx--) {
+            for (let idx = Math.min(currentLine.pvs.length, options.multiPv) - 1; idx >= 0; idx--) {
                 const pv = currentLine.pvs[idx];
-                if (pv.depth < currentLine.pvs[0].depth) continue;
-
+                
                 this.board.drawArrow({
                     from: pv.from,
                     to: pv.to,

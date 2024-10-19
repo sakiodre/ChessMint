@@ -8,6 +8,12 @@
     <SettingsRow label="Hash table size (MB)">
         <SettingsNumber v-model="options.engineHash" :min="512" :max="4096" :step="512"/>
     </SettingsRow>
+    <SettingsRow label="Use external engine">
+        <SettingsCheckBox v-model="options.engineUseExternal"/>
+    </SettingsRow>
+    <SettingsRow v-if="options.engineUseExternal" label="External engine port">
+        <SettingsNumber v-model="options.engineExternalPort" :min="1" :max="65535" :step="1"/>
+    </SettingsRow>
 </template>
 
 <script setup lang="ts">

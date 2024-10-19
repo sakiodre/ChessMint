@@ -1,3 +1,5 @@
+import { onOptionsUpdated, options } from "./options";
+
 export interface IEnginePv {
     lan: TLANotation;
     line: TLANotation[];
@@ -19,10 +21,8 @@ export interface IEngineHandler {
     onBestMoveFound(moveNumber: number, lan: TLANotation): void
 }
 
-export const ENGINE_MULTI_PV = 3;
-
+export const MIN_ENGINE_MULTI_PV = 3;
 const REGEX_BESTMOVE = /^bestmove (?<bestmove>[a-h][1-8][a-h][1-8][qrbn]?)?/;
-
 const REGEX_PV =
     /^info depth (?<depth>\d+) seldepth (?<seldepth>\d+) multipv (?<multipv>\d+) score (?<scoreType>cp|mate) (?<score>-?\d+) nodes (?<nodes>-?\d+) nps (?<nps>\d+)(?:.*?) pv (?<pv>.+)/;
 
@@ -31,7 +31,7 @@ const OriginalWorker = window.Worker;
 
 export class Engine {
     private readonly handler: IEngineHandler;
-    private readonly worker: Worker;
+    private readonly worker: Worker | WebSocket;
     private currentMoveNumber: number = 0;
     private isLoaded: boolean;
     private isReady: boolean;
@@ -41,7 +41,7 @@ export class Engine {
     private bestmoveCallback?: { (): void };
 
     private options: { [opt: string]: string | number | boolean };
-    
+
     constructor(handler: IEngineHandler) {
         let stockfishJsURL: string;
         let stockfishPathConfig = (window as any).Config.stockfish16_1.lite;
@@ -56,31 +56,46 @@ export class Engine {
 
         this.options = {};
 
-        // the multiThreaded NNUE engine needs the browser to support SharedArrayBuffer
-        try {
-            new SharedArrayBuffer(1024);
-            stockfishJsURL = stockfishPathConfig.multiThreaded.loader;
-        } catch (e) {
-            stockfishJsURL = stockfishPathConfig.singleThreaded.loader;
-        }
+        if (options.engineUseExternal) {
 
-        this.options["Hash"] = 512;
-        this.options["Threads"] = 4;
-        this.options["MultiPV"] = ENGINE_MULTI_PV;
-        this.options["Ponder"] = true;
-
-        try {
-            this.worker = new OriginalWorker(stockfishJsURL);
+            this.worker = new WebSocket(
+                `ws://localhost:${options.engineExternalPort}/ws`
+            );
             this.worker.onmessage = (e) => {
-                this.ProcessMessage(e);
-            };
-        } catch (e) {
-            alert("Failed to load stockfish");
-            throw e;
+                this.processMessage(e);
+            }
+            this.worker.onopen = () => {
+                this.send("uci");
+                this.updateOptions();
+            }
+            
+        } else {
+            // the multiThreaded NNUE engine needs the browser to support SharedArrayBuffer
+            try {
+                new SharedArrayBuffer(1024);
+                stockfishJsURL = stockfishPathConfig.multiThreaded.loader;
+            } catch (e) {
+                stockfishJsURL = stockfishPathConfig.singleThreaded.loader;
+            }
+    
+            try {
+                this.worker = new OriginalWorker(stockfishJsURL);
+                this.worker.onmessage = (e) => {
+                    this.processMessage(e);
+                };
+    
+            } catch (e) {
+                alert("Failed to load stockfish");
+                throw e;
+            }
+
+            this.send("uci");
+            this.updateOptions();
         }
 
-        this.send("uci");
-        this.sendEngineOptions();
+        onOptionsUpdated(() => {
+            this.updateOptions();
+        });
     }
 
     public newGame() {
@@ -88,8 +103,7 @@ export class Engine {
         this.send("ucinewgame");
     }
 
-    public go(lanMoves: TLANotation[], depth: number | undefined = undefined) {
-        
+    public go(lanMoves: TLANotation[], depth: number = options.engineDepth) {
         let fn = () => {
             this.isEvaluating = true;
             this.currentMoveNumber = lanMoves.length - 1;
@@ -109,7 +123,7 @@ export class Engine {
         this.onReady(() => {
             if (this.isEvaluating) this.stop(fn);
             else fn();
-        })
+        });
     }
 
     private onReady(callback: { (): void }) {
@@ -131,20 +145,28 @@ export class Engine {
     }
 
     private send(cmd: string): void {
-        this.worker.postMessage(cmd);
+        if (this.worker instanceof Worker) {
+            this.worker.postMessage(cmd);
+        } else {
+            this.worker.send(cmd)
+        }
     }
 
-    private sendEngineOptions(
-        options: { [opt: string]: string | number | boolean } | null = null
-    ) {
-        if (options === null) options = this.options;
+    private updateOptions() {
+        this.options["Hash"] = options.engineHash;
+        this.options["Threads"] = options.engineThreads;
+        this.options["Ponder"] = true;
+        this.options["MultiPV"] = Math.max(
+            options.multiPv,
+            MIN_ENGINE_MULTI_PV
+        );
 
-        Object.keys(options).forEach((key) => {
-            this.send(`setoption name ${key} value ${options![key]}`);
+        Object.keys(this.options).forEach((key) => {
+            this.send(`setoption name ${key} value ${this.options[key]}`);
         });
     }
 
-    private ProcessMessage(event: MessageEvent<any>) {
+    private processMessage(event: MessageEvent<any>) {
         let line: string =
             event && typeof event === "object" ? event.data : event;
 
@@ -189,7 +211,7 @@ export class Engine {
                         line[0].length == 5
                             ? (line[0].substring(4, 5) as TPromotionPiece)
                             : undefined;
-                    
+
                     let pv: IEnginePv = {
                         lan: line[0],
                         line: line,
